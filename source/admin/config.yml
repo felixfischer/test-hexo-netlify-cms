@@ -10,6 +10,16 @@ public_folder: 'images' # The src attribute for uploaded media will begin with i
 publish_mode: editorial_workflow
 
 collections:
+  - name: site
+    label: Site
+    files:
+      - label: "Site Settings"
+        name: site-settings
+        file: source/_data/site.yml
+        fields:
+          - {label: Title, name: title, widget: string}
+          - {label: Subtitle, name: subtitle, widget: string}
+          - {label: Description, name: description, widget: text}
   - name: 'Post' # Used in routes, e.g., /admin/collections/blog
     label: 'Post' # Used in the UI
     folder: 'source/_posts' # The path to the folder where the documents are stored
