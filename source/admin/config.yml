@@ -10,11 +10,11 @@ public_folder: 'images' # The src attribute for uploaded media will begin with i
 # publish_mode: editorial_workflow
 
 collections:
-  - name: site
-    label: Site
+  - name: settings
+    label: Settings
     files:
-      - label: "Site Settings"
-        name: site-settings
+      - label: "Site Global"
+        name: site
         file: source/_data/site.yml
         fields:
           - {label: Title, name: title, widget: string}
@@ -28,4 +28,12 @@ collections:
     fields: # The fields for each document, usually in front matter
       - {label: 'Title', name: 'title', widget: 'string'}
       - {label: 'Publish Date', name: 'date', widget: 'datetime'}
+      - {label: 'Body', name: 'body', widget: 'markdown'}
+  - name: page
+    label: Page
+    folder: source/_pages
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - {label: 'Title', name: 'title', widget: 'string'}
       - {label: 'Body', name: 'body', widget: 'markdown'}
