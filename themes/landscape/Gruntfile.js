@@ -1,11 +1,11 @@
-module.exports = function (grunt) {
+module.exports = function(grunt){
   grunt.initConfig({
     gitclone: {
       fontawesome: {
         options: {
           repository: 'https://github.com/FortAwesome/Font-Awesome.git',
           directory: 'tmp/fontawesome'
-        }
+        },
       },
       fancybox: {
         options: {
@@ -39,16 +39,8 @@ module.exports = function (grunt) {
 
   grunt.renameTask('clean', '_clean');
 
-  grunt.registerTask('fontawesome', [
-    'gitclone:fontawesome',
-    'copy:fontawesome',
-    '_clean:tmp'
-  ]);
-  grunt.registerTask('fancybox', [
-    'gitclone:fancybox',
-    'copy:fancybox',
-    '_clean:tmp'
-  ]);
+  grunt.registerTask('fontawesome', ['gitclone:fontawesome', 'copy:fontawesome', '_clean:tmp']);
+  grunt.registerTask('fancybox', ['gitclone:fancybox', 'copy:fancybox', '_clean:tmp']);
   grunt.registerTask('default', ['gitclone', 'copy', '_clean:tmp']);
   grunt.registerTask('clean', ['_clean']);
 };

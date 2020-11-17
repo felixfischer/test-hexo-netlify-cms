@@ -1,3 +1,4 @@
+
 categories: Categorieën
 search: Zoeken
 tags: Labels
@@ -7,7 +8,7 @@ prev: Vorige
 next: Volgende
 comment: Commentaren
 archive_a: Archieven
-archive_b: 'Archieven: %s'
+archive_b: "Archieven: %s"
 page: Pagina %d
 recent_posts: Recente berichten
 newer: Nieuwer
