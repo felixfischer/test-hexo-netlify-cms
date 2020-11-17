@@ -1,91 +1,77 @@
-# Hexo + Netlify CMS Starter
+---
+title: README
+---
 
-## Intro
-This is an example site built with [Hexo](https://hexo.io/) and [Netlify CMS](https://github.com/netlify/netlify-cms), based on [Viosey's](https://github.com/viosey) [Hexo material theme](https://github.com/viosey/hexo-theme-material).
+# Hexo-NetlifyCMS
 
-[Live demo](https://hexo-material-cms.netlify.com)
+![GitHub](https://img.shields.io/github/license/DemoMacro/Hexo-NetlifyCMS)
 
-## Deploy to Netlify
-Use the following deploy button to get your own copy of the repository up and running:
+> This is a hexo site hosted with Netlify.
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/lunaceee/hexo-material-netlify&stack=cms)
+<!-- Markdown snippet -->
 
-The Deploy to Netlify button clones a copy of this repository to your own GitHub or GitLab account. You can clone this repository to your computer for local development.
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/DemoMacro/Hexo-NetlifyCMS/)
 
-## Local Development
-```
-$ git clone --recursive https://github.com/lunaceee/hexo-material-netlify.git
-$ cd hexo-material-netlify
-$ npm install
-$ hexo server
-```
-_Notice that the `--recursive` flag is important here, as the `material` theme is [introduced as a submodule](https://stackoverflow.com/questions/3796927/how-to-git-clone-including-submodules)._
+## Quick Start
 
-Alternatively, you can update submodules manually:
-```
-cd hexo-material-netlify
-git submodule init
-git submodule update
-```
+Let's get started with Hexo-NetlifyCMS step by step.
 
-## Netlify CMS editor workflow
-The Netlify CMS `admin` panel is already set up in the repo. You can access it via `yourwebsite.com/admin`, e.g. `localhost:4000/admin`.
-To understand more about the configuration, check out [Netlify CMS docs](https://www.netlifycms.org/docs/intro/).
+### Fork [Hexo-NetlifyCMS](https://github.com/DemoMacro/Hexo-NetlifyCMS) on Github
 
-## Internationalization with Language-Based Redirects
-Netlify supports a wide range of [Redirect & Rewrite Rules](https://www.netlify.com/docs/redirects/). 
-Our example site is featuring the [Language-based redirecs](https://www.netlify.com/docs/redirects/#geoip-and-language-based-redirects), which comes in handy for any sites that support multiple languages.
+More info: [Configuration](https://hexo.io/docs/configuration.html)
 
-To enable language based redirects, make sure the following configurations in your root `_config.yml` file is included:
+### Deploy which repository you forked on Netlify
 
 ```
-language: 
-  - [language_01]
-  - [language_02]
-  - [language_03]
+Build command: hexo generate
+Publish directory: public
 ```
 
-```
-i18n_dir: :lang
-```
-In the markdown file, make sure you specify the language of the post in the front matter:
-```
-lang: [language of preference]
+More info: [A Step-by-Step Guide: Hexo on Netlify](https://www.netlify.com/blog/2015/10/26/a-step-by-step-guide-hexo-on-netlify/)
+
+### Enable Identity and Git Gateway
+
+Netlify's Identity and Git Gateway services allow you to manage CMS admin users for your site without requiring them to have an account with your Git host or commit access on your repo. From your site dashboard on Netlify:
+
+1. Go to **Settings > Identity**, and select **Enable Identity service**.
+2. Under **Registration preferences**, select **Open** or **Invite only**. In most cases, you want only invited users to access your CMS, but if you're just experimenting, you can leave it open for convenience.
+3. If you'd like to allow one-click login with services like Google and GitHub, check the boxes next to the services you'd like to use, under **External providers**.
+4. Scroll down to **Services > Git Gateway**, and click **Enable Git Gateway**. This authenticates with your Git host and generates an API access token. In this case, we're leaving the **Roles** field blank, which means any logged in user may access the CMS. For information on changing this, check the [Netlify Identity documentation](https://www.netlify.com/docs/identity/).
+
+### Add the Netlify Identity Widget
+
+You'll need to add this to the `<head>` of your CMS index page at /admin/index.html, as well as the `<head>` of your site's main index page.We could include the script in your site using Netlify's Script Injection feature;
+
+```html
+<!-- Include the script that enables Netlify Identity on this page. -->
+<script
+  src="https://cdn.jsdelivr.net/npm/netlify-identity-widget@1/build/netlify-identity-widget.min.js"
+  async
+  defer
+></script>
 ```
 
-Example code of language based redirect rules:
-```
-/           /zh-cn          302  Language=zh
-/about      /zh-cn/about    302  Language=zh
+Add the following script before the closing body tag of your site's main index page using Netlify's Script Injection feature.
 
-/           /es             302  Language=es
+```html
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', (user) => {
+      if (!user) {
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
+</script>
 ```
 
-Now, if your browser language is set to `zh-cn`, you'll be taken to https://yourwebsite.com/zh-cn/ automatically. You can apply this technique for any other languages. 
-Make sure that the file path in the redirect rules match your folder structures. E.g., I created a `zh-cn` folder for all the pages in Chinese and added an `about` folder containing the about page:
-```
-source/
-├── _data
-│   └── head.json
-├── _posts
-│   ├── Platero
-│   │   └── platero.jpg
-│   ├── Platero.md
-│   ├── hello-world.md
-│   └── 你好.md
-├── _redirects
-├── admin
-│   ├── config.yml
-│   └── index.html
-├── images
-│   └── uploads
-│       └── netlify-logo.png
-└── zh-cn
-    ├── about
-    │   └── index.md
-    └── index.md
-```
-Thus, in my `_redirects` file, I specified `/zh-cn/about` as a redirect rule for the about page in Chinese.
+### You are finished with Hexo-NetlifyCMS
 
-### Display a single language on the home page
-By default, our theme shows posts in all languages on the home page. We only want to show posts written in the default language of the browser. I found a nice plug-in [hexo-generator-index-i18n](https://github.com/xcatliu/hexo-generator-index-i18n) to filter out the unrelated posts. For example, if you go to https://yourwebsite.com/zh-cn/, you'd only see the posts written in Chinese. 
+Now you can control site content in https://yoursite.netlify.com/admin/
+
+## Donate
+
+- [Alipay](https://qr.alipay.com/fkx06887yqy4k3q5kemidbc)
+- [Paypal](https://paypal.me/DemoMacro)
